@@ -1419,13 +1419,6 @@ void CvVideoWriter_FFMPEG::close()
 
     av_free(outbuf);
 
-    /* free the streams */
-    for(i = 0; i < oc->nb_streams; i++)
-    {
-        av_freep(&oc->streams[i]->codec);
-        av_freep(&oc->streams[i]);
-    }
-
     if (!(fmt->flags & AVFMT_NOFILE))
     {
         /* close the output file */
@@ -1443,7 +1436,7 @@ void CvVideoWriter_FFMPEG::close()
     }
 
     /* free the stream */
-    av_free(oc);
+    avformat_free_context(oc);
 
     if( temp_image.data )
     {
